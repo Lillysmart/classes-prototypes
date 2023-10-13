@@ -1,5 +1,5 @@
 //composition 
-const fyable = {
+/*const fyable = {
   isFyling: false,
   liftoff: () {
     this.isFyling = true;
@@ -40,4 +40,4 @@ duck.liftoff()
 duck.land()
 duck.tap()
 
-duck.l
+*/
