@@ -1,43 +1,43 @@
-//@ts-check
-
-class counter {
-  static firstName = "leona";
-  static surname = "smart";
-  static greet() {
-    console.log("yo yo ");
+//composition 
+const fyable = {
+  isFyling: false,
+  liftoff: () {
+    this.isFyling = true;
+  },
+  land : (){
+    this.isFyling= false
   }
-  #value = 1;
-  #label = undefined;
-
-  /**
-   *
-   * @param {string} label
-   */
-  constructor(label) {
-    this.#label = label;
-  }
-  /**
-   *
-   * @param {number} amount
-   */
-  increase(amount) {
-    this.#value += amount || 1;
-  }
-  /**
-   *
-   * @param {number} amount
-   */
-  decrease(amount) {
-    this.#value -= amount || 1;
-  }
-  /**
-   *
-   */
-  display() {
-    console.log(`${this.#value}  ${this.#label}`);
-  }
+};
+const metal = {
+  material :"hard",
+  tap:()=> {
+    console.log ('clang clang')
+  },
 }
 
-console.log(counter.surname, counter.firstName, counter.greet());
-const example = new counter("lilly");
-//example.decrease
+const feathers = {
+  material :"soft",
+  tap:() =>{
+    console.log ('poke poke')
+  },
+}
+const airplane ={
+  ...fyable,
+  ...metal,
+}
+
+const dyck ={
+  ...fyable,
+  ...feathers,
+}
+
+airplane.liftoff()
+airplane.tap()
+
+duck.liftoff()
+duck.land()
+duck.liftoff()
+duck.land()
+duck.tap()
+
+duck.l
