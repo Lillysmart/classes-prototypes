@@ -1,88 +1,97 @@
 import {getHtml} from '../Modules/helpers.js'
 const template = document.createElement("template");
 
-template.innerHTML = /* Html */ ` 
+template.innerHTML = /* Html */ 
+`<style>
+    
+.overlay {
+  border-width: 0;
+  position: fixed;
+  top: 4rem;
+  max-width: 30rem;
+  width: 90%;
+  border-radius: 16px;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 1);
+  padding: 1rem 3rem;
 
-  <style>
-  * {
-  box-sizing: border-box;
+  box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2),
+    0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12);
 }
-.wrapper{
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    background: rgba(255, 255, 255, 1);
-    height: 4rem;
-    border-radius: 6px;
-    display: flex;
-    margin-bottom: 0.5rem;
-  }
-  
-  .check {
-    width: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .check:hover {
-    background: rgba(0, 50, 200, 0.1);
-  }
-  
-  .input {
-    height: 2rem;
-    width: 2rem;
-    border-radius: 16px;
-    cursor: pointer;
-  }
-  
-  .icon {
-    height: 1.5rem;
-    width: 1.5rem;
-  }
-  
-  .title {
-    height: 4rem;
-    width: 100%;
-    background: none;
-    text-align: left;
-    border-width: 0;
-    padding: 0 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    border-left: 1px solid grey;
-  }
-  
-  .title:hover {
-    background: rgba(0, 50, 200, 0.1);
-  }
-  </style>
 
-  <li class="wrapper">
-  <label class="check">
-  <input class="input" data-check type="checkbox" />
-</label>
+.overlay__title {
+  text-align: center;
+}
 
-<button class="title" data-title >
-</button>
+.overlay__row {
+  padding-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
 
-<button class="check" data-remove style="display:none"> </button>
+.overlay__field {
+  display: block;
+  padding-bottom: 1rem;
+}
 
-  <svg
-    class="icon"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 96 960 960"
+.overlay__input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.05);
+  height: 3rem;
+  padding: 0 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border-width: 0;
+}
 
-  >
-    <path
-      d="M253 961q-40.212 0-67.606-27.1Q158 906.8 158 867V314h-58v-94h231v-48h297v48h232v94h-58v553q0 39.05-27.769 66.525Q746.463 961 707 961H253Zm454-647H253v553h454V314ZM354 789h77V390h-77v399Zm175 0h78V390h-78v399ZM253 314v553-553Z"
-    ></path>
-  </svg>
-  
-  </button>
-    </li>`;
+.backdrop {
+  display: none;
+  background: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.overlay[open] ~ .backdrop {
+  display: block;
+}
+
+</style>
+    <dialog class="overlay" open="open">
+    <h2 class="overlay__title">Add Task</h2>
+    
+    <form data-form id="adding">
+    <label class="overlay__field">
+      <div>Title</div>
+      <input required class="overlay__input" name="title"/>
+    </label>
+    
+    <label class="overlay__field">
+      <div>due</div>
+      <input type="date" class="overlay__input" name="due"/>
+    </label>
+    
+    <label class="overlay__field">
+      <div>urgency</div>
+      <select required class="overlay__input" name="urgency">
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+      <option value="low">Low</option>
+      
+    
+      </select>
+    </label>
+    </form>
+    
+    <div class="overlay__row">
+      <button class="button" data-cancel>Cancel</button>
+      <button class="button" type="submit" form="adding">Save</button>
+    </div>
+    </dialog>
+    `;
 
 customElements.define(
   "single-task",
