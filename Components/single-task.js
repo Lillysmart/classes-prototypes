@@ -1,18 +1,76 @@
-const template =document.createElement('template')
+const template = document.createElement("template");
 
-  preview.innerHTML = /* Html */ ` 
-  <li class="task"></li>
-          <label class="task__check">
-            <input class="task__input" type="checkbox" />
+template.innerHTML = /* Html */ ` 
+
+  <style>
+  * {
+  box-sizing: border-box;
+}
+.wrapper{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 1);
+    height: 4rem;
+    border-radius: 6px;
+    display: flex;
+    margin-bottom: 0.5rem;
+  }
+  
+  .check {
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .check:hover {
+    background: rgba(0, 50, 200, 0.1);
+  }
+  
+  .input {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 16px;
+    cursor: pointer;
+  }
+  
+  .icon {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  
+  .title {
+    height: 4rem;
+    width: 100%;
+    background: none;
+    text-align: left;
+    border-width: 0;
+    padding: 0 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    border-left: 1px solid grey;
+  }
+  
+  .title:hover {
+    background: rgba(0, 50, 200, 0.1);
+  }
+  </style>
+
+  <li class="wrapper">
+          <label class="check >
+            <input class="input" type="checkbox" />
           </label>
 
-          <button class="task__title" >
+          <button class="title" >
           </button>
 
-          <button class="task__check"  style="display:none"> </button>
+          <button class="check"  style="display:none"> </button>
         
             <svg
-              class="task__icon"
+              class="icon"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 96 960 960"
           
@@ -22,4 +80,23 @@ const template =document.createElement('template')
               ></path>
             </svg>
             
-            </button>`
+            </button>
+    </li>`;
+
+customElements.define(
+  "single-task",
+
+  class extends HTMLElement {
+#title=undefined
+#due
+#completed
+#
+
+    inner = this.attachShadow({ mode: "closed" });
+    constructor() {
+      super();
+      const { content } = template;
+      this.inner.appendChild(content.cloneNode(true));
+    }
+  }
+);
