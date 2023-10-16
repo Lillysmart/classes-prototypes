@@ -41,3 +41,9 @@ duck.land()
 duck.tap()
 
 */
+
+class example extends HTMLElement{
+  connectedCallback(){
+    
+  }
+}
