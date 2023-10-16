@@ -1,3 +1,4 @@
+import {getHtml} from '../Modules/helpers.js'
 const template = document.createElement("template");
 
 template.innerHTML = /* Html */ ` 
@@ -60,43 +61,82 @@ template.innerHTML = /* Html */ `
   </style>
 
   <li class="wrapper">
-          <label class="check >
-            <input class="input" type="checkbox" />
-          </label>
+  <label class="check">
+  <input class="input" data-check type="checkbox" />
+</label>
 
-          <button class="title" >
-          </button>
+<button class="title" data-title >
+</button>
 
-          <button class="check"  style="display:none"> </button>
-        
-            <svg
-              class="icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 96 960 960"
-          
-            >
-              <path
-                d="M253 961q-40.212 0-67.606-27.1Q158 906.8 158 867V314h-58v-94h231v-48h297v48h232v94h-58v553q0 39.05-27.769 66.525Q746.463 961 707 961H253Zm454-647H253v553h454V314ZM354 789h77V390h-77v399Zm175 0h78V390h-78v399ZM253 314v553-553Z"
-              ></path>
-            </svg>
-            
-            </button>
+<button class="check" data-remove style="display:none"> </button>
+
+  <svg
+    class="icon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 96 960 960"
+
+  >
+    <path
+      d="M253 961q-40.212 0-67.606-27.1Q158 906.8 158 867V314h-58v-94h231v-48h297v48h232v94h-58v553q0 39.05-27.769 66.525Q746.463 961 707 961H253Zm454-647H253v553h454V314ZM354 789h77V390h-77v399Zm175 0h78V390h-78v399ZM253 314v553-553Z"
+    ></path>
+  </svg>
+  
+  </button>
     </li>`;
 
 customElements.define(
   "single-task",
 
   class extends HTMLElement {
-#title=undefined
-#due
-#completed
-#
+    /**
+     * @type {string}
+     */
+    #title = this.getAttribute("title");
+  /**
+     * @type {boolean}
+     */
+    #completed = this.getAttribute("completed") !== null;
+      /**
+     * @type {undefined | HTMLElement}
+     */
+    #elements = {
+          /**
+     * @type {undefined | HTMLElement}
+     */
+      check: undefined,
+        /**
+     * @type {undefined | HTMLElement}
+     */
+      title: undefined,
+        /**
+     * @type {undefined | HTMLElement}
+     */
+      remove: undefined,
+    };
 
-    inner = this.attachShadow({ mode: "closed" });
+  /**
+     * @type {ShadowRoot}
+     */
+    #inner = this.attachShadow({ mode: "closed" });
     constructor() {
       super();
       const { content } = template;
-      this.inner.appendChild(content.cloneNode(true));
+      this.#inner.appendChild(content.cloneNode(true));
     }
+    connectedCallback() {
+      this.#elements = {
+        check:getHtml({dataAttr: "check" , target: this.#inner}),
+        remove:getHtml({dataAttr: "remove" , target: this.#inner}),
+        title:getHtml({dataAttr: "title" , target: this.#inner})
+      };
+      this.#elements.title.innerText=this.#title
+      if (! (this.#elements.check instanceof HTMLInputElement)){
+throw new Error ("required input element")
+
+    }
+    
+    this.#elements.check.checked=this.#completed
+
   }
+}
 );

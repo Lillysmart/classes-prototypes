@@ -10,5 +10,8 @@ window.addEventListener("error",()=>{
   document.body.innerHTML=`<h1> something is very wrong </h1>`
 })
 
+const task = document.createElement('single-task')
+console.log(task)
+
 //const adding= createAdding()
 
