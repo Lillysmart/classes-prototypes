@@ -73,7 +73,7 @@ template.innerHTML =
 }
 
 </style>
-    <dialog class="overlay" open="open">
+    <dialog class="overlay"  >
     <h2 class="title">Add Task</h2>
     
     <form data-form id="adding">
@@ -89,7 +89,7 @@ template.innerHTML =
     
     <label class="field">
       <div>urgency</div>
-      <select required class="overlay__input" name="urgency">
+      <select required class="input" name="urgency">
       <option value="medium">Medium</option>
       <option value="high">High</option>
       <option value="low">Low</option>
@@ -106,10 +106,9 @@ template.innerHTML =
     </dialog>
     `;
 
-customElements.define(
-  "task-adding",
 
-  class extends HTMLElement {
+
+ export class Taskadding extends HTMLElement {
     #open = false;
     #elements = {
       /**
@@ -135,6 +134,7 @@ customElements.define(
       super();
       const { content } = template;
       this.#inner.appendChild(content.cloneNode(true));
+     
     }
     connectedCallback() {
       this.#elements = {
@@ -142,26 +142,47 @@ customElements.define(
         cancel: getHtml({ dataAttr: "cancel", target: this.#inner }),
         overlay: getHtml({ dataAttr: "overlay", target: this.#inner }),
       };
-      this.#elements.cancel.addEventListener('click', ()=>{
-        this.open= false
-      })
+
+      this.open=this.getAttribute("open")!== null
+
+      this.#elements.cancel.addEventListener("click", () => {
+        this.open = false;
+      });
+      this.#elements.form.addEventListener("submit", (event) => {
+        event.preventDefault();
+       
+        if (!(event.target instanceof HTMLFormElement)) {
+          throw new Error("form not found");
+        }
+        const entries = new FormData(event.target);
+        const response = Object.fromEntries(entries);
+
+        console.log(response);
+        //state.submission(response)
+        event.target.reset();
+        this.open = false;
+      });
+     
     }
     set open(newValue) {
       if (newValue === this.#open) return;
       this.#open = newValue;
-      if ((this.#elements.overlay instanceof HTMLDialogElement)){
-        throw new Error ('Dialog element required')
+      if (this.#elements.overlay instanceof HTMLDialogElement) {
+        throw new Error("Dialog element required");
       }
-
 
       if (newValue) {
         this.#elements.overlay.showModal();
-      }else {
-        this.#elements.close()
+      } else {
+        this.#elements.overlay.close();
       }
     }
     get open() {
       return this.#open;
     }
   }
-);
+  customElements.define(
+    "task-adding", taskAdding)
+    
+
+export default Taskadding
