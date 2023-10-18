@@ -160,7 +160,7 @@ export class Taskadding extends HTMLElement {
         bubbles:true,
         detail: response,
       })
-      this.dispatchEvent(event)
+      this.dispatchEvent(added)
 
       event.target.reset();
       this.open = false;
