@@ -24,9 +24,9 @@ button_primary{
 }
 </style>
 <button>
-    <slot  name='start'></slot>
+   <span>==></span>
     <slot></slot>
-    <slot  name='end'>(END)</slot>
+  
     </button>`
 
 console.log(template);
