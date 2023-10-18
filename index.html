@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="./styles.css" />
 
     <script src="scripts.js" defer type="module"></script>
+    <script src="Components/user-action.js" defer type="module"></script>
   </head>
   <body>
     <div class="app" data-app>
 
       <h1 class="app__title">Todo App</h1>
-     <user-action>Add Task</user-action>
+      <user-action data-add-button>Add Task</user-action>
+
  <task-adding data-adding ></task-adding>
       <ul class="app__list" data-list>
         <single-task title="eat" completed></single-task>
