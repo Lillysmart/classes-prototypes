@@ -23,7 +23,11 @@ button_primary{
     color: white;
 }
 </style>
-<button><slot></slot></button>`;
+<button>
+    <slot  name='start'></slot>
+    <slot></slot>
+    <slot  name='end'>(END)</slot>
+    </button>`
 
 console.log(template);
 
@@ -33,11 +37,31 @@ class UserInput extends HTMLElement {
    * @type {'primary'| 'secondary'}
    */
   #importance ='secondary'
-  #elements ={}
+  #elements ={
+   /**
+    * @type {null | HTMLButtonElement}
+    */
+    button:null,
+  }
+  constructor(){
+    super()
+    if(!  this.innerHTML || this.innerHTML.trim()===""){
+        throw new Error ('user action must have content')
+
+    }
+  }
 
   connectedCallback() {
     const node = template.content.cloneNode(true);
     this.#inner.appendChild(node);
+    this.#elements={
+        button: this.#inner.querySelector("button"),
+    }
+    const importance=this.getAttribute("importance") || 'secondary'
+    if ((importance !== 'primary') && importance!=="secondary"){
+        throw new Error("invalid importance")
+    }
+    this.importance=importance
   }
 
   set importance(value){
@@ -46,9 +70,9 @@ class UserInput extends HTMLElement {
     }
     this.#importance=value
     if ( value ==='primary'){
-        .classList.add("primary")
+       this.#elements.button.classList.add("primary")
     }else {
-
+        this.#elements.button.classList.remove("primary")
     }
   }
   get importance(){
