@@ -73,7 +73,7 @@ template.innerHTML =
 }
 
 </style>
-    <dialog class="overlay"  >
+    <dialog class="overlay" data-overlay >
     <h2 class="title">Add Task</h2>
     
     <form data-form id="adding">
@@ -106,83 +106,84 @@ template.innerHTML =
     </dialog>
     `;
 
-
-
- export class Taskadding extends HTMLElement {
-    #open = false;
-    #elements = {
-      /**
-       * @type {undefined | HTMLElement}
-       */
-      form: undefined,
-
-      /**
-       * @type {undefined | HTMLElement}
-       */
-      cancel: undefined,
-      /**
-       * @type {undefined | HTMLElement}
-       */
-      overlay: undefined,
-    };
+export class Taskadding extends HTMLElement {
+  #open = false;
+  #elements = {
+    /**
+     * @type {undefined | HTMLElement}
+     */
+    form: undefined,
 
     /**
-     * @type {ShadowRoot}
+     * @type {undefined | HTMLElement}
      */
-    #inner = this.attachShadow({ mode: "closed" });
-    constructor() {
-      super();
-      const { content } = template;
-      this.#inner.appendChild(content.cloneNode(true));
-     
-    }
-    connectedCallback() {
-      this.#elements = {
-        form: getHtml({ dataAttr: "form", target: this.#inner }),
-        cancel: getHtml({ dataAttr: "cancel", target: this.#inner }),
-        overlay: getHtml({ dataAttr: "overlay", target: this.#inner }),
-      };
+    cancel: undefined,
+    /**
+     * @type {undefined | HTMLElement}
+     */
+    overlay: undefined,
+  };
 
-      this.open=this.getAttribute("open")!== null
+  /**
+   * @type {ShadowRoot}
+   */
+  #inner = this.attachShadow({ mode: "closed" });
+  constructor() {
+    super();
+    const { content } = template;
+    this.#inner.appendChild(content.cloneNode(true));
+    
+  }
+  connectedCallback() {
+    this.#elements = {
+      form: getHtml({ dataAttr: "form", target: this.#inner }),
+      cancel: getHtml({ dataAttr: "cancel", target: this.#inner }),
+      overlay: getHtml({ dataAttr: "overlay", target: this.#inner }),
+      
+    };
+    this.open = this.getAttribute("open") !== null;
 
-      this.#elements.cancel.addEventListener("click", () => {
-        this.open = false;
-      });
-      this.#elements.form.addEventListener("submit", (event) => {
-        event.preventDefault();
-       
-        if (!(event.target instanceof HTMLFormElement)) {
-          throw new Error("form not found");
-        }
-        const entries = new FormData(event.target);
-        const response = Object.fromEntries(entries);
+    this.#elements.cancel.addEventListener("click", () => {
+      this.open = false;
+    });
+    this.#elements.form.addEventListener("submit", (event) => {
+      event.preventDefault();
 
-        console.log(response);
-        //state.submission(response)
-        event.target.reset();
-        this.open = false;
-      });
-     
-    }
-    set open(newValue) {
-      if (newValue === this.#open) return;
-      this.#open = newValue;
-      if (this.#elements.overlay instanceof HTMLDialogElement) {
-        throw new Error("Dialog element required");
+      if (!(event.target instanceof HTMLFormElement)) {
+        throw new Error("form not found");
       }
+      const entries = new FormData(event.target);
+      const response = Object.fromEntries(entries);
 
-      if (newValue) {
-        this.#elements.overlay.showModal();
-      } else {
-        this.#elements.overlay.close();
-      }
+     
+      const added= new CustomEvent("added",{
+        bubbles:true,
+        detail: response,
+      })
+      this.dispatchEvent(event)
+
+      event.target.reset();
+      this.open = false;
+    });
+  }
+  set open(newValue) {
+    if (newValue === this.#open) return;
+    this.#open = newValue;
+
+    if (!(this.#elements.overlay instanceof HTMLDialogElement)) {
+      throw new Error("Dialog element required");
     }
-    get open() {
-      return this.#open;
+
+    if (newValue) {
+      this.#elements.overlay.showModal();
+    } else {
+      this.#elements.overlay.close();
     }
   }
-  customElements.define(
-    "task-adding", taskAdding)
-    
+  get open() {
+    return this.#open;
+  }
+}
+customElements.define("task-adding", Taskadding);
 
-export default Taskadding
+export default Taskadding;
