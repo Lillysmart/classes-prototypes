@@ -3,31 +3,37 @@ template.innerHTML =
   /*html*/
  `
 <style>
-.button {
+button {
   height: 3rem;
   padding: 0 3rem;
   background: white;
-  color:bkack;
+  color:var(--color-primary-100);
   border-radius: 8px;
   border-width: 0;
   cursor: pointer;
-  border:1px solid black
+  border:1px solid var(--color-primary-100);
+  font-weight: bold;
+  font-size:1rem;
 }
-.button:hover {
+button:hover {
     background: #111;
 }
-.button_primary{
-    background: black;
+button_primary{
+    background:var(--color-primary-100);  
     color: white;
 }
 </style>
-<button class="button"><slot></slot></button>`;
+<button><slot></slot></button>`;
 
 console.log(template);
 
 class UserInput extends HTMLElement {
   #inner = this.attachShadow({ mode: "open" });
+  /**
+   * @type {'primary'| 'secondary'}
+   */
   #importance ='secondary'
+  #elements ={}
 
   connectedCallback() {
     const node = template.content.cloneNode(true);
@@ -35,7 +41,18 @@ class UserInput extends HTMLElement {
   }
 
   set importance(value){
+    if (value===this.#importance){
+        return
+    }
     this.#importance=value
+    if ( value ==='primary'){
+        .classList.add("primary")
+    }else {
+
+    }
+  }
+  get importance(){
+    return this.#importance
   }
 }
 customElements.define("user-action", UserInput);
